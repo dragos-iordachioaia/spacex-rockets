@@ -6,12 +6,12 @@ export default class LaunchDetails extends Component {
     const { launch } = this.props;
 
     return (
-      <>
-        <li>{moment(launch.launch_date_utc).format("LL")}</li>
-        <li>{launch.rocket.rocket_name}</li>
-        <li>{launch.launch_site.site_name_long}</li>
-        <li>{launch.details}</li>
-      </>
+      <li>
+        <p>{moment(launch.launch_date_utc).format("LL")}</p>
+        <p>{launch.rocket.rocket_name}</p>
+        <p>{launch.launch_site.site_name_long}</p>
+        <p>{launch.details}</p>
+      </li>
     );
   }
 }

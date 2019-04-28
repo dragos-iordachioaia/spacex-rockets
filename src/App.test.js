@@ -10,10 +10,15 @@ const reactDropdownSelector = node => {
   return className === "rocket-dropdown";
 };
 
-let wrapper;
-
 describe("App component", () => {
+  let wrapper;
+  const originalFetchRockets = Api.fetchRocketList;
+  const originalFetchLaunches = Api.fetchLaunchesList;
+
   beforeEach(() => {
+    Api.fetchRocketList = originalFetchRockets;
+    Api.fetchLaunchesList = originalFetchLaunches;
+
     wrapper = shallow(<App />);
     wrapper.setState({
       pending: false
@@ -40,14 +45,30 @@ describe("App component", () => {
         });
       })
     );
+    Api.fetchRocketList = mockFetchRocketList;
     const instance = wrapper.instance();
     instance.componentDidMount();
     await new Promise(resolve => {
       resolve();
     });
-    console.log(wrapper.state());
-    console.log(wrapper.props());
+
     expect(wrapper.find(".preloader").exists()).toBe(false);
+  });
+
+  it("handles the error on the '/rockets' call", async () => {
+    const mockFetchRocketList = jest.fn().mockReturnValue(
+      new Promise((resolve, reject) => {
+        reject();
+      })
+    );
+    Api.fetchRocketList = mockFetchRocketList;
+    const instance = wrapper.instance();
+    instance.componentDidMount();
+    await new Promise(resolve => {
+      resolve();
+    });
+
+    expect(wrapper.find(".rockets-error").exists()).toBe(true);
   });
 
   it("shows the selector component", () => {
@@ -88,7 +109,9 @@ describe("App component", () => {
     wrapper
       .findWhere(reactDropdownSelector)
       .simulate("change", { value: "falcon1", label: "Falcon 1" });
-    wrapper.find(".submit").simulate("click");
+    wrapper
+      .find(".content form")
+      .simulate("submit", { preventDefault: jest.fn() });
     await new Promise(resolve => resolve());
 
     expect(wrapper.find("LaunchList").prop("launches")).toEqual([
@@ -97,5 +120,23 @@ describe("App component", () => {
         name: "Falcon 1"
       }
     ]);
+  });
+
+  it("submits the form and handles the error", async () => {
+    const mockFetchLaunches = jest.fn().mockReturnValue(
+      new Promise((resolve, reject) => {
+        reject();
+      })
+    );
+    Api.fetchLaunchesList = mockFetchLaunches;
+    wrapper
+      .findWhere(reactDropdownSelector)
+      .simulate("change", { value: "falcon1", label: "Falcon 1" });
+    wrapper
+      .find(".content form")
+      .simulate("submit", { preventDefault: jest.fn() });
+    await new Promise(resolve => resolve());
+
+    expect(wrapper.find(".launches-error").exists()).toBe(true);
   });
 });

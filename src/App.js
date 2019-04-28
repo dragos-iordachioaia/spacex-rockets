@@ -18,9 +18,11 @@ export default class App extends Component {
       yearLaunch: "",
       launches: null,
       errorRockets: null,
-      errorLaunches: null
+      errorLaunches: null,
+      loadingLaunches: false
     };
     this.displayContent = this.displayContent.bind(this);
+    this.displayLaunchList = this.displayLaunchList.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -41,6 +43,7 @@ export default class App extends Component {
       },
       error => {
         this.setState({
+          pending: false,
           errorRockets: true
         });
       }
@@ -59,22 +62,44 @@ export default class App extends Component {
     });
   }
 
-  onSubmit() {
+  onSubmit(e) {
+    e.preventDefault();
+    this.setState({
+      loadingLaunches: true
+    });
     Api.fetchLaunchesList(
       this.state.yearLaunch,
       this.state.selectedOption.value
     ).then(
       response => {
         this.setState({
-          launches: response.data
+          launches: response.data,
+          loadingLaunches: false
         });
       },
       error => {
         this.setState({
-          errorLaunches: true
+          errorLaunches: true,
+          loadingLaunches: false
         });
       }
     );
+  }
+
+  displayLaunchList() {
+    if (this.state.loadingLaunches) {
+      return <p>Loading...</p>;
+    }
+
+    if (this.state.errorLaunches) {
+      return (
+        <p className="launches-error">
+          Sorry, we've encountered an error while fetching the launch list
+        </p>
+      );
+    }
+
+    return <LaunchList launches={this.state.launches} />;
   }
 
   displayContent() {
@@ -83,28 +108,30 @@ export default class App extends Component {
     }
 
     const { selectedOption } = this.state;
-    if (this.state.errorRockets === true) {
+    if (this.state.errorRockets) {
       return (
-        <p>Sorry, we've encountered an error while fetching the rocket list</p>
+        <p className="rockets-error">
+          Sorry, we've encountered an error while fetching the rocket list
+        </p>
       );
     }
     return (
       <div className="content">
-        <Select
-          className="rocket-dropdown"
-          value={selectedOption}
-          options={this.state.options}
-          onChange={this.handleChange}
-        />
-        <input
-          className="year"
-          value={this.state.yearLaunch}
-          onChange={this.onInputChange}
-        />
-        <button className="submit" onClick={this.onSubmit}>
-          Submit
-        </button>
-        <LaunchList launches={this.state.launches} />
+        <form onSubmit={this.onSubmit}>
+          <Select
+            className="rocket-dropdown"
+            value={selectedOption}
+            options={this.state.options}
+            onChange={this.handleChange}
+          />
+          <input
+            className="year"
+            value={this.state.yearLaunch}
+            onChange={this.onInputChange}
+          />
+          <button className="submit">Submit</button>
+        </form>
+        {this.displayLaunchList()}
       </div>
     );
   }
