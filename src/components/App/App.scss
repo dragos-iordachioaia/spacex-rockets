@@ -1,0 +1,99 @@
+* {
+  box-sizing: border-box;
+  outline: 0;
+}
+
+body {
+  background-color: #6374e6;
+}
+
+@keyframes entry-animation {
+  from {
+    opacity: 0;
+    margin-top: 20px;
+  }
+
+  to {
+    margin-top: 0px;
+    opacity: 1;
+  }
+}
+
+.app {
+  & > .preloader {
+    position: absolute;
+    top: calc(50% - 15px);
+    left: calc(50% - 35px);
+  }
+  .content {
+    width: 90vw;
+    max-width: 500px;
+    max-height: 90vh;
+    margin: 0 auto;
+    background-color: #fff;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    padding: 20px;
+    overflow: auto;
+    border-radius: 4px;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    margin-top: -20px;
+
+    animation-name: entry-animation;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-duration: 0.4s;
+
+    label {
+      margin-bottom: 10px;
+      display: block;
+      color: #888;
+      font-size: 0.9em;
+      margin-left: 1px;
+    }
+
+    .rocket-dropdown {
+      display: block;
+      margin: 0 auto;
+      width: 100%;
+      border: 1px solid #eee;
+      background-color: white;
+      padding: 10px;
+      height: 30px;
+      color: #444;
+      font-weight: bold;
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+    .year {
+      display: block;
+      width: 100%;
+      border: 1px solid #eee;
+      border-radius: 4px;
+      padding: 8px;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+    .submit {
+      display: block;
+      width: 50%;
+      margin: 0 auto;
+      background-color: darken(#6374e6, 5);
+      color: white;
+      border: 0;
+      padding: 7px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 400ms;
+      transform-origin: 50% 50%;
+      font-weight: bold;
+
+      &:hover {
+        transform: scale(0.9);
+      }
+    }
+  }
+}

@@ -3,13 +3,17 @@ import React, { Component } from "react";
 import * as Api from "../../Api/Api";
 import LaunchList from "../LaunchList/LaunchList";
 
+import Preloader from "../Preloader/Preloader";
+
+import "./App.scss";
+
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       pending: true,
       options: null,
-      selectedOption: null,
+      selectedOption: "",
       yearLaunch: "",
       launches: null,
       errorRockets: null,
@@ -83,7 +87,7 @@ export default class App extends Component {
 
   displayLaunchList() {
     if (this.state.loadingLaunches) {
-      return <p>Loading...</p>;
+      return <Preloader />;
     }
 
     if (this.state.errorLaunches) {
@@ -111,19 +115,22 @@ export default class App extends Component {
     });
 
     return (
-      <select
-        className="rocket-dropdown"
-        value={this.state.selectedOption}
-        onChange={this.handleChange}
-      >
-        {options}
-      </select>
+      <>
+        <label>Choose a rocket</label>
+        <select
+          className="rocket-dropdown"
+          value={this.state.selectedOption}
+          onChange={this.handleChange}
+        >
+          {options}
+        </select>
+      </>
     );
   }
 
   displayContent() {
     if (this.state.pending) {
-      return <p className="preloader">Loading...</p>;
+      return <Preloader />;
     }
 
     if (this.state.errorRockets) {
@@ -137,10 +144,12 @@ export default class App extends Component {
       <div className="content">
         <form onSubmit={this.onSubmit}>
           {this.displayRocketList()}
+          <label>Choose a year</label>
           <input
             className="year"
             value={this.state.yearLaunch}
             onChange={this.onInputChange}
+            placeholder=""
           />
           <button className="submit">Submit</button>
         </form>
@@ -150,6 +159,6 @@ export default class App extends Component {
   }
 
   render() {
-    return <div className="App"> {this.displayContent()}</div>;
+    return <div className="app"> {this.displayContent()}</div>;
   }
 }

@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import LaunchDetails from "../LaunchDetails/LaunchDetails";
 
+import "./LaunchList.scss";
+
 export default class LaunchList extends Component {
   constructor(props) {
     super(props);
@@ -8,15 +10,15 @@ export default class LaunchList extends Component {
   }
 
   displayLaunches() {
-    if (!this.props.launches) {
-      return null;
-    }
     return this.props.launches.map((launch, index) => {
       return <LaunchDetails key={launch.flight_number} launch={launch} />;
     });
   }
 
   render() {
-    return <ul>{this.displayLaunches()}</ul>;
+    if (!this.props.launches) {
+      return null;
+    }
+    return <ul className="launch-list">{this.displayLaunches()}</ul>;
   }
 }

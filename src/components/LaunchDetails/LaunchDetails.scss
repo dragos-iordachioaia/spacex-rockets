@@ -1,0 +1,21 @@
+.launch-item {
+  // background-color: #fafafa;
+  padding: 10px;
+  padding-bottom: 30px;
+  margin-bottom: 20px;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid #eee;
+  }
+
+  b {
+    color: #c0392b;
+    margin-right: 5px;
+  }
+
+  p {
+    font-size: 0.9em;
+    color: #444;
+    // letter-spacing: 1px;
+  }
+}
