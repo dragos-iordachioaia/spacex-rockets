@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
-import * as Api from "./Api/Api";
-import LaunchList from "./components/LaunchList/LaunchList";
+import * as Api from "../../Api/Api";
+import LaunchList from "../LaunchList/LaunchList";
 
 export default class App extends Component {
   constructor(props) {
@@ -126,7 +126,6 @@ export default class App extends Component {
       return <p className="preloader">Loading...</p>;
     }
 
-    const { selectedOption } = this.state;
     if (this.state.errorRockets) {
       return (
         <p className="rockets-error">

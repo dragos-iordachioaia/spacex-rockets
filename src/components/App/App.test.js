@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { shallow } from "enzyme";
 
-import * as Api from "./Api/Api";
+import * as Api from "../../Api/Api";
 import App from "./App";
 
 describe("App component", () => {
