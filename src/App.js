@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Select from "react-select";
 
 import * as Api from "./Api/Api";
 import LaunchList from "./components/LaunchList/LaunchList";
@@ -46,9 +45,9 @@ export default class App extends Component {
     );
   }
 
-  handleChange(selectedOption) {
+  handleChange(e) {
     this.setState({
-      selectedOption
+      selectedOption: e.target.value
     });
   }
 
@@ -65,7 +64,7 @@ export default class App extends Component {
     });
     Api.fetchLaunchesList(
       this.state.yearLaunch,
-      this.state.selectedOption.value
+      this.state.selectedOption
     ).then(
       response => {
         this.setState({
@@ -98,6 +97,30 @@ export default class App extends Component {
     return <LaunchList launches={this.state.launches} />;
   }
 
+  displayRocketList() {
+    if (!this.state.options) {
+      return null;
+    }
+
+    let options = this.state.options.map(option => {
+      return (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      );
+    });
+
+    return (
+      <select
+        className="rocket-dropdown"
+        value={this.state.selectedOption}
+        onChange={this.handleChange}
+      >
+        {options}
+      </select>
+    );
+  }
+
   displayContent() {
     if (this.state.pending) {
       return <p className="preloader">Loading...</p>;
@@ -114,12 +137,7 @@ export default class App extends Component {
     return (
       <div className="content">
         <form onSubmit={this.onSubmit}>
-          <Select
-            className="rocket-dropdown"
-            value={selectedOption}
-            options={this.state.options}
-            onChange={this.handleChange}
-          />
+          {this.displayRocketList()}
           <input
             className="year"
             value={this.state.yearLaunch}

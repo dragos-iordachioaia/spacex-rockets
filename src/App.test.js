@@ -5,34 +5,14 @@ import { shallow } from "enzyme";
 import * as Api from "./Api/Api";
 import App from "./App";
 
-const reactDropdownSelector = node => {
-  let className = node.prop("className");
-  return className === "rocket-dropdown";
-};
-
 describe("App component", () => {
   let wrapper;
   const originalFetchRockets = Api.fetchRocketList;
   const originalFetchLaunches = Api.fetchLaunchesList;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     Api.fetchRocketList = originalFetchRockets;
     Api.fetchLaunchesList = originalFetchLaunches;
-
-    wrapper = shallow(<App />);
-    wrapper.setState({
-      pending: false
-    });
-  });
-
-  it("shows a preloader if the content is not ready to display", () => {
-    wrapper.setState({
-      pending: true
-    });
-    expect(wrapper.find(".preloader").exists()).toBe(true);
-  });
-
-  it("hides the preloader", async () => {
     const mockFetchRocketList = jest.fn().mockReturnValue(
       new Promise((resolve, reject) => {
         resolve({
@@ -46,12 +26,18 @@ describe("App component", () => {
       })
     );
     Api.fetchRocketList = mockFetchRocketList;
-    const instance = wrapper.instance();
-    instance.componentDidMount();
-    await new Promise(resolve => {
-      resolve();
-    });
+    wrapper = shallow(<App />);
+    await new Promise(resolve => resolve());
+  });
 
+  it("shows a preloader if the content is not ready to display", () => {
+    wrapper.setState({
+      pending: true
+    });
+    expect(wrapper.find(".preloader").exists()).toBe(true);
+  });
+
+  it("hides the preloader", async () => {
     expect(wrapper.find(".preloader").exists()).toBe(false);
   });
 
@@ -71,18 +57,25 @@ describe("App component", () => {
     expect(wrapper.find(".rockets-error").exists()).toBe(true);
   });
 
-  it("shows the selector component", () => {
-    expect(wrapper.findWhere(reactDropdownSelector).exists()).toBe(true);
+  it("shows the rocket dropdown", async () => {
+    const instance = wrapper.instance();
+    instance.componentDidMount();
+
+    expect(wrapper.find(".rocket-dropdown").exists()).toBe(true);
+  });
+
+  it("doesn't show the rocket dropdown if there aren't any options", () => {
+    wrapper.setState({
+      options: null
+    });
+    expect(wrapper.find(".rocket-dropdown").exists()).toBe(false);
   });
 
   it("selects a rocket", () => {
     wrapper
-      .findWhere(reactDropdownSelector)
-      .simulate("change", { value: "falcon1", label: "Falcon 1" });
-    expect(wrapper.findWhere(reactDropdownSelector).prop("value")).toEqual({
-      value: "falcon1",
-      label: "Falcon 1"
-    });
+      .find(".rocket-dropdown")
+      .simulate("change", { target: { value: "falcon1" } });
+    expect(wrapper.find(".rocket-dropdown").prop("value")).toEqual("falcon1");
   });
 
   it("the year input works", () => {
@@ -107,8 +100,8 @@ describe("App component", () => {
     );
     Api.fetchLaunchesList = mockFetchLaunches;
     wrapper
-      .findWhere(reactDropdownSelector)
-      .simulate("change", { value: "falcon1", label: "Falcon 1" });
+      .find(".rocket-dropdown")
+      .simulate("change", { target: { value: "falcon1" } });
     wrapper
       .find(".content form")
       .simulate("submit", { preventDefault: jest.fn() });
@@ -130,8 +123,8 @@ describe("App component", () => {
     );
     Api.fetchLaunchesList = mockFetchLaunches;
     wrapper
-      .findWhere(reactDropdownSelector)
-      .simulate("change", { value: "falcon1", label: "Falcon 1" });
+      .find(".rocket-dropdown")
+      .simulate("change", { target: { value: "falcon1" } });
     wrapper
       .find(".content form")
       .simulate("submit", { preventDefault: jest.fn() });
