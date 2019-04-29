@@ -1,12 +1,8 @@
 import React, { Component } from "react";
-import axios from "axios";
 import Select from "react-select";
 
 import * as Api from "./Api/Api";
 import LaunchList from "./components/LaunchList/LaunchList";
-
-const rocketsURL = "https://api.spacexdata.com/v2/rockets";
-const launchesURL = "https://api.spacexdata.com/v2/launches";
 
 export default class App extends Component {
   constructor(props) {
