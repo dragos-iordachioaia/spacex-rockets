@@ -19,12 +19,12 @@ describe("LaunchDetails component", () => {
         }}
       />
     );
-    expect(wrapper.find(".launch-date").text()).toEqual("April 29, 2019");
-    expect(wrapper.find(".launch-details").text()).toEqual(
+    expect(wrapper.find(".launch-date").text()).toContain("April 29, 2019");
+    expect(wrapper.find(".launch-details").text()).toContain(
       "Engine failure at 33 seconds and loss of vehicle"
     );
-    expect(wrapper.find(".rocket-name").text()).toEqual("Falcon 1");
-    expect(wrapper.find(".launch-site").text()).toEqual(
+    expect(wrapper.find(".rocket-name").text()).toContain("Falcon 1");
+    expect(wrapper.find(".launch-site").text()).toContain(
       "Kwajalein Atoll Omelek Island"
     );
   });

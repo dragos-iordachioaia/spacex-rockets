@@ -15,7 +15,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test:e2e": "cucumber-js features/search.feature",
+    "test:e2e": "cucumber-js features/**/*.feature",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -44,7 +44,7 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "src/**/*.js"
+      "src/components/**/*.js"
     ]
   }
 }

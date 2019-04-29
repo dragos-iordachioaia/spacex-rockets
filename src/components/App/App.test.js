@@ -34,11 +34,11 @@ describe("App component", () => {
     wrapper.setState({
       pending: true
     });
-    expect(wrapper.find(".preloader").exists()).toBe(true);
+    expect(wrapper.find("Preloader").exists()).toBe(true);
   });
 
   it("hides the preloader", async () => {
-    expect(wrapper.find(".preloader").exists()).toBe(false);
+    expect(wrapper.find("Preloader").exists()).toBe(false);
   });
 
   it("handles the error on the '/rockets' call", async () => {

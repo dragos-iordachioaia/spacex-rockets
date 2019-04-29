@@ -24,4 +24,10 @@ describe("LaunchList component", () => {
     const wrapper = shallow(<LaunchList />);
     expect(wrapper.find("LaunchDetails").length).toEqual(0);
   });
+
+  it("shows a message if the are no launches", () => {
+    const wrapper = shallow(<LaunchList launches={[]} />);
+    expect(wrapper.find(".no-launches-message").exists()).toBe(true);
+    expect(wrapper.find("LaunchDetails").length).toEqual(0);
+  });
 });

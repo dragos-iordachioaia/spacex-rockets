@@ -1,6 +1,15 @@
 Feature: Search Rockets
-  Scenario: Find launches
-    When I select "falcon1"
-    And I type "2006" inside the input
+  Background:
+   Given The page has loaded
+
+  Scenario: Display launches
+    When I select "falcon9"
+    And I type "2016" inside the input
     When I click the submit button
     Then I should see a list of launches for that rocket
+
+  Scenario: Display message if there are no launches
+    When I select "falcon9"
+    And I type "1888" inside the input
+    When I click the submit button
+    Then I see an error message

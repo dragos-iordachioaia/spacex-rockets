@@ -19,6 +19,14 @@ export default class LaunchList extends Component {
     if (!this.props.launches) {
       return null;
     }
+
+    if (this.props.launches.length === 0) {
+      return (
+        <p className="no-launches-message">
+          Sorry, we couldn't find any results
+        </p>
+      );
+    }
     return <ul className="launch-list">{this.displayLaunches()}</ul>;
   }
 }
