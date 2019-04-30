@@ -18,7 +18,7 @@ As seen in the screenshot above, the app is fully responsive.
 This command is used for the unit testing part. The coverage can be seen in the below screenshot.
 The "sad paths" are also tested.
 
-![](images/unit-tests.png)
+![](images/unit-test_coverage.png)
 
 ### `npm test:e2e`
 
